@@ -6,7 +6,10 @@ public class ballRight : MonoBehaviour
 {
     public Transform Target;
     public float Speed = 1f;
-
+    void Start()
+    {
+        Speed = Random.Range(8f, 15f);
+    }
     void Update()
     {
         transform.Translate(Vector3.right * Time.deltaTime * Speed);

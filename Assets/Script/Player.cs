@@ -6,6 +6,7 @@ using static UnityEngine.GraphicsBuffer;
 public class Player : MonoBehaviour
 {
     Rigidbody2D p_rigid2D;
+    CapsuleCollider2D capsuleCollider;
     SpriteRenderer spriteRenderer;
     Animator anim;
     
@@ -18,6 +19,7 @@ public class Player : MonoBehaviour
     {
         p_rigid2D = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        capsuleCollider = GetComponent<CapsuleCollider2D>();
         anim = GetComponent<Animator>();
         clear = false;
         isdead = false;
@@ -38,8 +40,8 @@ public class Player : MonoBehaviour
 
     
     
-    //카메라 밖으로 이동 제한
-    Vector3 pos = Camera.main.WorldToViewportPoint(transform.position);
+        //카메라 밖으로 이동 제한
+        Vector3 pos = Camera.main.WorldToViewportPoint(transform.position);
 
         if (pos.x < 0f) pos.x = 0f;
         if (pos.x > 1f) pos.x = 1f;
@@ -48,6 +50,22 @@ public class Player : MonoBehaviour
 
         transform.position = Camera.main.ViewportToWorldPoint(pos);
 
+        //문워크 방지
+        if(point.x > transform.position.x)
+        {
+            spriteRenderer.flipX = true;
+        }
+        if (point.x < transform.position.x)
+        {
+            spriteRenderer.flipX = false;
+        }
+
+
+
+        if (Input.GetKey(KeyCode.Mouse1))
+        {
+            ClearStage();
+        }
     }
     
 
@@ -61,10 +79,14 @@ public class Player : MonoBehaviour
 
         if (collision.gameObject.tag == "goal")
         {
-            Debug.Log("클리어");
-            clear = true;
+            ClearStage();
         }
 
+    }
 
+    public void ClearStage()
+    {
+        Debug.Log("클리어");
+        clear = true;
     }
 }
